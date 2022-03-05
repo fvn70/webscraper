@@ -6,16 +6,14 @@ def load_api(url):
     return r
 
 url = input("Input the URL:\n")
+r = load_api(url)
 
-if 'title' not in url:
-    print('\nInvalid movie page!')
+if r.status_code != 200:
+    print(f"\nThe URL returned {r.status_code}")
 else:
-    dic = {}
     r = load_api(url)
-    soup = BeautifulSoup(r.content, 'html.parser')
-    h_link = soup.find('h1')
-    dic['title'] = h_link.text
-    span_link = soup.find('span', 'GenresAndPlot__TextContainerBreakpointL-sc-cum89p-1 eqlIrG')
-    dic['description'] = span_link.text
-    print(dic)
+    with open('source.html', 'wb') as file:
+        file.write(r.content)
+    print('Content saved.')
+
 
